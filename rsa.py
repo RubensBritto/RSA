@@ -53,6 +53,11 @@ class RSA(object):
             arq.write(str(e))
         self._pbKey = (n, e)
         return True
+    
+    def input_public_key(self):
+       pass
+       # TODO: fazer essa função ai e midificar generate_public_key para
+       # receber o e tambem 
 
     @property
     def pbKey(self):
