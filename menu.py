@@ -38,6 +38,6 @@ class Menu(object):
 
 if __name__ == '__main__':
     menu = Menu({
-        'OP1': 1,
+        '': 1,
     })
     menu.run()
