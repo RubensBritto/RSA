@@ -1,4 +1,4 @@
-def eh_primo(n):
+def primo(n):
     for i in range(2, n//2+1):
         if n % i == 0:
             return False
@@ -27,11 +27,6 @@ class RSA(object):
         self._pbKey = None
         self._pvtKey = None
 
-    @staticmethod
-    def _handle_value(n):
-        if not n.isnumeric():
-            raise TypeError ('The value must be an integer.')
-
     def generate_public_key(self, p, q):
         n = p * q
         phi = (p - 1) * (q - 1)
@@ -39,31 +34,54 @@ class RSA(object):
             return False
         while True:
             e = input('Digite o valor de e: ').strip()
-            try:
-                self._handle_value(e)
+            if e.isnumeric():
                 e = int(e)
                 if not (mdc(phi, e) == 1) or (e > phi or e < 2):
                     print('e não é primo relativo de phi.')
                     continue
-                break
-            except:
+                else:
+                    break
+            else:
                 print('Valor invalido!')
+                continue
         with open('public key.txt', 'w') as arq:
             arq.write(str(n) + '\n')
             arq.write(str(e))
         self._pbKey = (n, e)
         return True
-    
+
+    def _read_primo():
+        while True:
+            n = input(': ').strip()
+            if n.isnumeric():
+                n = int(n)
+                if not primo(n):
+                    print("n não é primo.")
+                    continue
+                break
+            else:
+                print('Valor invalido!')
+        return n
+
     def input_public_key(self):
-       pass
-       # TODO: fazer essa função ai e midificar generate_public_key para
-       # receber o e tambem 
+        while True:
+            print('Digite o valor de p')
+            p = self._read_primo()
+            print('Digite o valor de q')
+            q = self._read_primo()
+
+            if self.generate_public_key(p, q):
+                print('Chave publica gerada com sucesso.')
+                break
+            else:
+                print('p * q não atinge o valor minimo(27).')
 
     @property
     def pbKey(self):
         return self._pbKey
-        
-rsa = RSA()
-rsa.generate_public_key(17, 41)
 
-print(rsa.pbKey)
+if __name__ == '__main__':
+    rsa = RSA()
+    rsa.generate_public_key(17, 41)
+
+    print(rsa.pbKey)
