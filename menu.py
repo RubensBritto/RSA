@@ -8,37 +8,41 @@ class Menu(object):
         self.submenus.keys()
         self.submenuNum = list(self.submenus.keys())
 
-    def _handle_opcao(self, opcao):
-        if not opcao.isnumeric():
+    def _handle_opcao(self, option):
+        if not option.isnumeric():
             raise ValueError ('Option must be an integer.')
-        assert 0 < int(opcao) <= len(self.submenuNum) or int(opcao) == 99
+        assert 0 < int(option) <= len(self.submenuNum) or int(option) == 99
 
     def select(self):
         while True:
-            opcao = input('Digite a opção que deseja:: ')
+            option = input('Digite a opção que deseja:: ')
             try:
-                self._handle_opcao(opcao)
+                self._handle_opcao(option)
                 break
             except:
                 print('Opção invalida!')
 
-        opcao = int(opcao)
-        if opcao == 99:
-            return
+        option = int(option)
+        if option == 99:
+            return 99
         keys = self.submenuNum
-        self.submenus[keys[opcao - 1]]()
+        self.submenus[keys[option - 1]]()
+        return option
 
     def print_menu(self):
         print('========== Opções ==========')
 
         keys = self.submenuNum
         for c in range(len(keys)):
-            print(f' - {c + 1} {keys[c]}')
+            print(f' - {c + 1:>2} {keys[c]}')
         print(' - 99 Sair\n')
 
     def run(self):
-        self.print_menu()
-        self.select()
+        running = True
+        while running:
+            self.print_menu()
+            if self.select() == 99:
+                running = False
 
 
 if __name__ == '__main__':
